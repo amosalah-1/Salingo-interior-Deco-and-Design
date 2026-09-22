@@ -6,6 +6,28 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateHeader();
 	window.addEventListener('scroll', updateHeader, { passive: true });
 
+	const menuToggle = document.querySelector('.menu-toggle');
+	const mainNav = document.querySelector('.main-nav');
+	const closeMenu = () => {
+		header.classList.remove('menu-open');
+		menuToggle.setAttribute('aria-expanded', 'false');
+		menuToggle.setAttribute('aria-label', 'Open menu');
+	};
+
+	menuToggle.addEventListener('click', () => {
+		const isOpen = header.classList.toggle('menu-open');
+		menuToggle.setAttribute('aria-expanded', String(isOpen));
+		menuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+	});
+
+	mainNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+	window.addEventListener('resize', () => {
+		if (window.innerWidth > 800) closeMenu();
+	});
+	document.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') closeMenu();
+	});
+
 	const revealObserver = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {

@@ -59,7 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
 	const form = document.querySelector('.quote-form');
 	form.addEventListener('submit', (event) => {
 		event.preventDefault();
-		form.querySelector('.form-status').textContent = 'Thank you. We will be in touch shortly.';
+		const formData = new FormData(form);
+		const name = formData.get('name');
+		const email = formData.get('email');
+		const service = formData.get('service');
+		const message = formData.get('message');
+		const emailBody = [
+			`Name: ${name}`,
+			`Email: ${email}`,
+			`Service: ${service}`,
+			'',
+			'Project details:',
+			message || 'Not provided',
+		].join('\n');
+		const gmailUrl = new URL('https://mail.google.com/mail/');
+		gmailUrl.searchParams.set('view', 'cm');
+		gmailUrl.searchParams.set('fs', '1');
+		gmailUrl.searchParams.set('to', 'godfreysilingi08@gmail.com');
+		gmailUrl.searchParams.set('su', `New quote request from ${name}`);
+		gmailUrl.searchParams.set('body', emailBody);
+		window.open(gmailUrl.toString(), '_blank', 'noopener,noreferrer');
+		form.querySelector('.form-status').textContent = 'Your quote request is ready in Gmail. Review it and select Send.';
 		form.reset();
 	});
 });

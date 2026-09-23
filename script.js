@@ -28,6 +28,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (event.key === 'Escape') closeMenu();
 	});
 
+	const viewProjectsButton = document.querySelector('.view-projects-button');
+	const additionalProjects = document.querySelector('.additional-projects');
+	if (viewProjectsButton && additionalProjects) {
+		const buttonLabel = viewProjectsButton.querySelector('span');
+		viewProjectsButton.addEventListener('click', () => {
+			const isExpanded = viewProjectsButton.getAttribute('aria-expanded') === 'true';
+			additionalProjects.hidden = isExpanded;
+			viewProjectsButton.setAttribute('aria-expanded', String(!isExpanded));
+			buttonLabel.textContent = isExpanded ? 'View all projects' : 'Show fewer projects';
+		});
+	}
+
 	const revealObserver = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
